@@ -9,6 +9,9 @@ public class HealthManager : MonoBehaviour
 
     public Image healthBar;
     public float healthAmount = 100f;
+
+    private float DamageTimer = 5f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +21,18 @@ public class HealthManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (DamageTimer > 0)
+        {
+            DamageTimer -= Time.deltaTime;
+        }
+        else
+        {
+            DamageTimer = 5f;
+            TakeDamage(5);
+
+        }
+
         if (healthAmount <= 0)
         {
             //_rigidBody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;

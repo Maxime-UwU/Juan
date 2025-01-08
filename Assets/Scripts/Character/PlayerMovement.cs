@@ -7,6 +7,12 @@ public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody2D _rigidBody;
 
+    [SerializeField]
+    private Sprite Juan;
+
+    [SerializeField]
+    private Sprite JuanCrouch;
+
     public Animator animator;
 
     public float horizontalMove = 0f;
@@ -20,8 +26,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     public float m_MoveSpeed, m_JumpForce;
 
-    //[SerializeField]
-    //private Collider2D m_CrouchDisableCollider;
+    [SerializeField]
+    private Collider2D m_CrouchDisableCollider;
 
     //[SerializeField]
     //private Collider2D m_CrouchDisableCollider2;
@@ -30,9 +36,11 @@ public class PlayerMovement : MonoBehaviour
 
     private bool _isGrounded = false;
 
+    private SpriteRenderer Character;
+
     private bool _isJumping = false;
 
-    //private bool _isCrouching = false;
+    private bool _isCrouching = false;
 
     //[System.Serializable]
     //public class BoolEvent : UnityEvent<bool> { }
@@ -62,11 +70,25 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    //public void Crouch()
-    //{
-    //    if (_isGrounded)
-    //        _isCrouching = true;
-    //}
+    public void Crouch()
+    {
+        if (_isGrounded)
+        {
+            Character = gameObject.GetComponent<SpriteRenderer>();
+            Character.sprite = JuanCrouch;
+            _isCrouching = true;
+        }
+    }
+
+    public void UnCrouch()
+    {
+        if (_isGrounded)
+        {
+            Character = gameObject.GetComponent<SpriteRenderer>();
+            Character.sprite = Juan;
+            _isCrouching = false;
+        }
+    }
 
     private void FixedUpdate()
     {
@@ -90,37 +112,16 @@ public class PlayerMovement : MonoBehaviour
             _rigidBody.AddForce(Vector2.up * m_JumpForce, ForceMode2D.Impulse);
         }
 
-        //if (_isCrouching)
-        //{
-        //    if (!m_wasCrouching)
-        //    {
-        //        m_wasCrouching = true;
-        //        OnCrouchEvent.Invoke(true);
-        //    }
-
-        //    if (m_CrouchDisableCollider != null)
-        //        m_CrouchDisableCollider.enabled = false;
-        //        m_CrouchDisableCollider2.enabled = false;
-
-
-        //    //_isCrouching = false;
-        //    m_CrouchDisableCollider.enabled = false;
-        //    //_rigidBody.AddForce(Vector2.up * m_JumpForce, ForceMode2D.Impulse);
-        //}
-        //else
-        //{
-        //    if (m_CrouchDisableCollider != null)
-        //        m_CrouchDisableCollider.enabled = true;
-        //        m_CrouchDisableCollider2.enabled = true;
-
-
-        //    if (m_wasCrouching)
-        //    {
-        //        _isCrouching = false;
-        //        m_wasCrouching = false;
-        //        OnCrouchEvent.Invoke(false);
-        //    }
-        //}
+        if (_isCrouching)
+        {
+            m_MoveSpeed = 4f;
+            m_CrouchDisableCollider.enabled = false;
+        }
+        else
+        {
+            m_MoveSpeed = 8f;
+            m_CrouchDisableCollider.enabled = true;
+        }
 
 
     }
