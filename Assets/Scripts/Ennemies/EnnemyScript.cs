@@ -6,6 +6,13 @@ public class EnnemyScript : MonoBehaviour
 {
     public float TimeLeft;
     public bool TimerOn = false;
+    public AudioSource source;
+
+    void Awake()
+    {
+        source = GetComponent<AudioSource>();
+
+    }
 
     void Update()
     {
@@ -27,6 +34,7 @@ public class EnnemyScript : MonoBehaviour
     {
         if(!TimerOn)
         {
+            source.Play();
             TimeLeft = 2f;
             TimerOn = true;
             collision.GetComponent<HealthManager>().TakeDamage(10);

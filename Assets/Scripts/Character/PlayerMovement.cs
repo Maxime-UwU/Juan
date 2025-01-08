@@ -7,12 +7,6 @@ public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody2D _rigidBody;
 
-    [SerializeField]
-    private Sprite Juan;
-
-    [SerializeField]
-    private Sprite JuanCrouch;
-
     public Animator animator;
 
     public float horizontalMove = 0f;
@@ -29,25 +23,16 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private Collider2D m_CrouchDisableCollider;
 
-    //[SerializeField]
-    //private Collider2D m_CrouchDisableCollider2;
+    [SerializeField]
+    private AudioSource m_AudioSourceEnable;
 
     private float _dir = 0;
 
     private bool _isGrounded = false;
 
-    private SpriteRenderer Character;
-
     private bool _isJumping = false;
 
     private bool _isCrouching = false;
-
-    //[System.Serializable]
-    //public class BoolEvent : UnityEvent<bool> { }
-
-    //public BoolEvent OnCrouchEvent;
-    //private bool m_wasCrouching = false;
-
 
     [SerializeField]
     private LayerMask m_GroundMask;
@@ -74,8 +59,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (_isGrounded)
         {
-            Character = gameObject.GetComponent<SpriteRenderer>();
-            Character.sprite = JuanCrouch;
             _isCrouching = true;
         }
     }
@@ -84,8 +67,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (_isGrounded)
         {
-            Character = gameObject.GetComponent<SpriteRenderer>();
-            Character.sprite = Juan;
             _isCrouching = false;
         }
     }
@@ -99,10 +80,12 @@ public class PlayerMovement : MonoBehaviour
         if (Mathf.Abs(_dir) > 0.01f)
         {
             _rigidBody.velocity = new Vector2(_dir * m_MoveSpeed, _rigidBody.velocity.y);
+            m_AudioSourceEnable.Play();
         }
         else
         {
             _rigidBody.velocity = new Vector2(_rigidBody.velocity.x * m_Deceleration, _rigidBody.velocity.y);
+            m_AudioSourceEnable.Play();
         }
 
         if (_isJumping)
