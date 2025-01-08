@@ -8,13 +8,15 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D _rigidBody;
 
     public Animator animator;
+    public SpriteRenderer spriteRenderer; // Référence au SpriteRenderer
 
     public float horizontalMove = 0f;
 
     [SerializeField, Range(0f, 1f)]
     private float m_Deceleration;
 
-    [Range(0, 1)][SerializeField]
+    [Range(0, 1)]
+    [SerializeField]
     private float m_CrouchSpeed = .36f;
 
     [SerializeField]
@@ -22,9 +24,6 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField]
     private Collider2D m_CrouchDisableCollider;
-
-    [SerializeField]
-    private AudioSource m_AudioSourceEnable;
 
     private float _dir = 0;
 
@@ -37,9 +36,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private LayerMask m_GroundMask;
 
+    // Sprites pour l'état normal et l'état accroupi
+    public Sprite standingSprite; // Sprite normal
+    public Sprite crouchingSprite; // Sprite accroupi
+
     private void Awake()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>(); // Récupère le SpriteRenderer
     }
 
     public void Move(float dir)
@@ -51,8 +55,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (_isGrounded)
             _isJumping = true;
-            animator.SetBool("IsJumping", true);
-
+        animator.SetBool("IsJumping", true);
     }
 
     public void Crouch()
@@ -60,6 +63,7 @@ public class PlayerMovement : MonoBehaviour
         if (_isGrounded)
         {
             _isCrouching = true;
+            spriteRenderer.sprite = crouchingSprite; // Change le sprite quand on s'accroupit
         }
     }
 
@@ -68,6 +72,7 @@ public class PlayerMovement : MonoBehaviour
         if (_isGrounded)
         {
             _isCrouching = false;
+            spriteRenderer.sprite = standingSprite; // Restaure le sprite normal quand on se relève
         }
     }
 
@@ -80,12 +85,10 @@ public class PlayerMovement : MonoBehaviour
         if (Mathf.Abs(_dir) > 0.01f)
         {
             _rigidBody.velocity = new Vector2(_dir * m_MoveSpeed, _rigidBody.velocity.y);
-            m_AudioSourceEnable.Play();
         }
         else
         {
             _rigidBody.velocity = new Vector2(_rigidBody.velocity.x * m_Deceleration, _rigidBody.velocity.y);
-            m_AudioSourceEnable.Play();
         }
 
         if (_isJumping)
@@ -105,8 +108,6 @@ public class PlayerMovement : MonoBehaviour
             m_MoveSpeed = 8f;
             m_CrouchDisableCollider.enabled = true;
         }
-
-
     }
 
     private void Update()
