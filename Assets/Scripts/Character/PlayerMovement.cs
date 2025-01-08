@@ -7,6 +7,10 @@ public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody2D _rigidBody;
 
+    public Animator animator;
+
+    public float horizontalMove = 0f;
+
     [SerializeField, Range(0f, 1f)]
     private float m_Deceleration;
 
@@ -54,6 +58,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if (_isGrounded)
             _isJumping = true;
+            animator.SetBool("IsJumping", true);
+
     }
 
     //public void Crouch()
@@ -64,6 +70,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        horizontalMove = Input.GetAxisRaw("Horizontal") * m_MoveSpeed;
+
+        animator.SetFloat("Speed", Mathf.Abs(horizontalMove));
+
         if (Mathf.Abs(_dir) > 0.01f)
         {
             _rigidBody.velocity = new Vector2(_dir * m_MoveSpeed, _rigidBody.velocity.y);
@@ -76,7 +86,7 @@ public class PlayerMovement : MonoBehaviour
         if (_isJumping)
         {
             _isJumping = false;
-
+            animator.SetBool("IsJumping", false);
             _rigidBody.AddForce(Vector2.up * m_JumpForce, ForceMode2D.Impulse);
         }
 
