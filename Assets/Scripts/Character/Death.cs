@@ -19,7 +19,6 @@ public class Death : MonoBehaviour
     {
         if (m_Player.position.y <= -7)
         {
-            Debug.Log("reset");
             string currentSceneName = SceneManager.GetActiveScene().name;
             SceneManager.LoadScene(currentSceneName);
         }

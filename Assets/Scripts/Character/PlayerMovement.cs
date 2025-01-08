@@ -16,11 +16,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     public float m_MoveSpeed, m_JumpForce;
 
-    [SerializeField]
-    private Collider2D m_CrouchDisableCollider;
+    //[SerializeField]
+    //private Collider2D m_CrouchDisableCollider;
 
-    [SerializeField]
-    private Collider2D m_CrouchDisableCollider2;
+    //[SerializeField]
+    //private Collider2D m_CrouchDisableCollider2;
 
     private float _dir = 0;
 
@@ -28,13 +28,13 @@ public class PlayerMovement : MonoBehaviour
 
     private bool _isJumping = false;
 
-    private bool _isCrouching = false;
+    //private bool _isCrouching = false;
 
-    [System.Serializable]
-    public class BoolEvent : UnityEvent<bool> { }
+    //[System.Serializable]
+    //public class BoolEvent : UnityEvent<bool> { }
 
-    public BoolEvent OnCrouchEvent;
-    private bool m_wasCrouching = false;
+    //public BoolEvent OnCrouchEvent;
+    //private bool m_wasCrouching = false;
 
 
     [SerializeField]
@@ -56,11 +56,11 @@ public class PlayerMovement : MonoBehaviour
             _isJumping = true;
     }
 
-    public void Crouch()
-    {
-        if (_isGrounded)
-            _isCrouching = true;
-    }
+    //public void Crouch()
+    //{
+    //    if (_isGrounded)
+    //        _isCrouching = true;
+    //}
 
     private void FixedUpdate()
     {
@@ -80,37 +80,37 @@ public class PlayerMovement : MonoBehaviour
             _rigidBody.AddForce(Vector2.up * m_JumpForce, ForceMode2D.Impulse);
         }
 
-        if (_isCrouching)
-        {
-            if (!m_wasCrouching)
-            {
-                m_wasCrouching = true;
-                OnCrouchEvent.Invoke(true);
-            }
+        //if (_isCrouching)
+        //{
+        //    if (!m_wasCrouching)
+        //    {
+        //        m_wasCrouching = true;
+        //        OnCrouchEvent.Invoke(true);
+        //    }
 
-            if (m_CrouchDisableCollider != null)
-                m_CrouchDisableCollider.enabled = false;
-                m_CrouchDisableCollider2.enabled = false;
-
-
-            //_isCrouching = false;
-            m_CrouchDisableCollider.enabled = false;
-            //_rigidBody.AddForce(Vector2.up * m_JumpForce, ForceMode2D.Impulse);
-        }
-        else
-        {
-            if (m_CrouchDisableCollider != null)
-                m_CrouchDisableCollider.enabled = true;
-                m_CrouchDisableCollider2.enabled = true;
+        //    if (m_CrouchDisableCollider != null)
+        //        m_CrouchDisableCollider.enabled = false;
+        //        m_CrouchDisableCollider2.enabled = false;
 
 
-            if (m_wasCrouching)
-            {
-                _isCrouching = false;
-                m_wasCrouching = false;
-                OnCrouchEvent.Invoke(false);
-            }
-        }
+        //    //_isCrouching = false;
+        //    m_CrouchDisableCollider.enabled = false;
+        //    //_rigidBody.AddForce(Vector2.up * m_JumpForce, ForceMode2D.Impulse);
+        //}
+        //else
+        //{
+        //    if (m_CrouchDisableCollider != null)
+        //        m_CrouchDisableCollider.enabled = true;
+        //        m_CrouchDisableCollider2.enabled = true;
+
+
+        //    if (m_wasCrouching)
+        //    {
+        //        _isCrouching = false;
+        //        m_wasCrouching = false;
+        //        OnCrouchEvent.Invoke(false);
+        //    }
+        //}
 
 
     }
@@ -119,20 +119,4 @@ public class PlayerMovement : MonoBehaviour
     {
         _isGrounded = Physics2D.Raycast(transform.position, Vector2.down, 0.7f, m_GroundMask);
     }
-
-    public void TakeDamage()
-    {
-        Debug.Log("dead !");
-       
-    }
-
-    public void GetPowerUp()
-    {
-        Debug.Log("Boosted !");
-        GameObject Player = GameObject.Find("Player");
-        SpriteRenderer spriteRenderer = Player.GetComponent<SpriteRenderer>();
-        spriteRenderer.color = Color.red;
-
-    }
-  
 }
