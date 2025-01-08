@@ -28,5 +28,10 @@ public class CharacterController : MonoBehaviour
         {
             m_Movement.Jump();
         }
+
+        if (Keyboard.current.sKey.wasPressedThisFrame)
+        {
+            m_Movement.Crouch();
+        }
     }
 }
