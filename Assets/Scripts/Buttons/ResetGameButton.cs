@@ -1,23 +1,46 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
+
 
 public class ResetGameButton : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField]
+    public Animator animator;
+
+    public float delayBeforeActivation = 1f;
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Keyboard.current.rKey.isPressed)
+        {
+            Debug.Log("reset");
+            StartCoroutine(Reset());
+
+        }
+
+        if (Keyboard.current.cKey.isPressed)
+        {
+            Debug.Log("quit");
+            StartCoroutine(QuitGame());
+        }
     }
 
-    public void ResetGame()
+    public IEnumerator Reset()
     {
-        Debug.Log("RESET");
+        animator.SetTrigger("End");
+        yield return new WaitForSeconds(delayBeforeActivation);
+        SceneManager.LoadScene("SampleScene");
+    }
+
+    public IEnumerator QuitGame()
+    {
+        animator.SetTrigger("End");
+        yield return new WaitForSeconds(delayBeforeActivation);
+        Application.Quit();
+
     }
 }
