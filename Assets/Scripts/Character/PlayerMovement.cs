@@ -10,6 +10,10 @@ public class PlayerMovement : MonoBehaviour
     public Animator animator;
     public SpriteRenderer spriteRenderer; // Référence au SpriteRenderer
 
+    [SerializeField]
+    public AudioSource sourceWalk;
+
+
     public float horizontalMove = 0f;
 
     [SerializeField, Range(0f, 1f)]
@@ -42,6 +46,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
+        //sourceWalk = GetComponent<AudioSource>();
         _rigidBody = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>(); // Récupère le SpriteRenderer
     }
@@ -55,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (_isGrounded)
             _isJumping = true;
-        animator.SetBool("IsJumping", true);
+            animator.SetBool("IsJumping", true);
     }
 
     public void Crouch()
@@ -82,24 +87,26 @@ public class PlayerMovement : MonoBehaviour
 
         animator.SetFloat("Speed", Mathf.Abs(horizontalMove));
 
-        // Modifier la direction du personnage en fonction du mouvement horizontal
+
         if (horizontalMove > 0f)
         {
-            spriteRenderer.flipX = false; // Personnage regarde à droite
+            spriteRenderer.flipX = false;
         }
         else if (horizontalMove < 0f)
         {
-            spriteRenderer.flipX = true; // Personnage regarde à gauche
+            spriteRenderer.flipX = true;
         }
 
-        // Déplacer le personnage en fonction de la direction
+
         if (Mathf.Abs(_dir) > 0.01f)
         {
             _rigidBody.velocity = new Vector2(_dir * m_MoveSpeed, _rigidBody.velocity.y);
+            RunSound();
         }
         else
         {
             _rigidBody.velocity = new Vector2(_rigidBody.velocity.x * m_Deceleration, _rigidBody.velocity.y);
+            RunSound();
         }
 
         if (_isJumping)
@@ -125,5 +132,10 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         _isGrounded = Physics2D.Raycast(transform.position, Vector2.down, 0.7f, m_GroundMask);
+    }
+
+    public void RunSound()
+    {
+        sourceWalk.Play();
     }
 }
