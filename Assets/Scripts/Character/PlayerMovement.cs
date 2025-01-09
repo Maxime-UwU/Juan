@@ -63,7 +63,7 @@ public class PlayerMovement : MonoBehaviour
         if (_isGrounded)
         {
             _isCrouching = true;
-            spriteRenderer.sprite = crouchingSprite; // Change le sprite quand on s'accroupit
+            animator.SetBool("IsCrouching", true);
         }
     }
 
@@ -72,7 +72,7 @@ public class PlayerMovement : MonoBehaviour
         if (_isGrounded)
         {
             _isCrouching = false;
-            spriteRenderer.sprite = standingSprite; // Restaure le sprite normal quand on se relève
+            animator.SetBool("IsCrouching", false);
         }
     }
 
@@ -82,6 +82,17 @@ public class PlayerMovement : MonoBehaviour
 
         animator.SetFloat("Speed", Mathf.Abs(horizontalMove));
 
+        // Modifier la direction du personnage en fonction du mouvement horizontal
+        if (horizontalMove > 0f)
+        {
+            spriteRenderer.flipX = false; // Personnage regarde à droite
+        }
+        else if (horizontalMove < 0f)
+        {
+            spriteRenderer.flipX = true; // Personnage regarde à gauche
+        }
+
+        // Déplacer le personnage en fonction de la direction
         if (Mathf.Abs(_dir) > 0.01f)
         {
             _rigidBody.velocity = new Vector2(_dir * m_MoveSpeed, _rigidBody.velocity.y);
@@ -98,6 +109,7 @@ public class PlayerMovement : MonoBehaviour
             _rigidBody.AddForce(Vector2.up * m_JumpForce, ForceMode2D.Impulse);
         }
 
+        // Gestion de l'accroupissement
         if (_isCrouching)
         {
             m_MoveSpeed = 4f;

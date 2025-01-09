@@ -9,13 +9,15 @@ public class HealthManager : MonoBehaviour
 
     public Image healthBar;
     public float healthAmount = 100f;
+    public AudioSource sourceHeal;
 
     private float DamageTimer = 5f;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        sourceHeal = GetComponent<AudioSource>();
+
     }
 
     // Update is called once per frame
@@ -49,6 +51,7 @@ public class HealthManager : MonoBehaviour
 
     public void Heal(float _healingAmmount)
     {
+        sourceHeal.Play();
         healthAmount += _healingAmmount;
         healthAmount = Mathf.Clamp(healthAmount, 0, 100);
 
